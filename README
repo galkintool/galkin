@@ -1,0 +1,73 @@
+####################################################################################################
+# galkin, version 1.0, by Miguel Pato and Fabio Iocco.
+# Last update: MP 11 Nov 2016.
+############
+# A tool to handle the available data on the rotation curve of the Milky Way.
+####################################################################################################
+
+
+# Structure
+This distribution contains the following files:
+ README					README file.
+ setup.py				Setup file.
+ bin/					Example scripts for use of galkin.
+     galkin_data.py			Script to retrieve and output the data given the user-defined input parameters.
+     galkin_plotter.py			Script to plot the data outputted by galkin_data.py.
+     galkin_data_fast.py		Script to retrieve and output the data without input/output files.
+     inputpars.txt			Sample input parameter file to feed to galkin_data.py.
+     ouput/
+	   posdata_baseline.dat		Sample position data outputted by galkin_data.py for baseline parameter set.
+           vcdata_baseline.dat		Sample velocity data outputted by galkin_data.py for baseline parameter set.
+           rawdata_baseline.dat		Sample raw data outputted by galkin_data.py for baseline parameter set.
+           posdata_baseline_gas.dat	Sample gas position data outputted by galkin_data.py for baseline parameter set.
+           vcdata_baseline_gas.dat	Sample gas velocity data outputted by galkin_data.py for baseline parameter set.
+           rawdata_baseline_gas.dat	Sample gas raw data outputted by galkin_data.py for baseline parameter set.
+           posdata_baseline_stars.dat	Sample star position data outputted by galkin_data.py for baseline parameter set.
+           vcdata_baseline_stars.dat	Sample star velocity data outputted by galkin_data.py for baseline parameter set.
+           rawdata_baseline_stars.dat	Sample star raw data outputted by galkin_data.py for baseline parameter set.
+           posdata_baseline_masers.dat	Sample maser position data outputted by galkin_data.py for baseline parameter set.
+           vcdata_baseline_masers.dat	Sample maser velocity data outputted by galkin_data.py for baseline parameter set.
+           rawdata_baseline_masers.dat	Sample maser raw data outputted by galkin_data.py for baseline parameter set.
+           posdata_R85.dat		Sample position data outputted by galkin_data.py for R0=8.5 kpc.
+           vcdata_R85.dat		Sample velocity data outputted by galkin_data.py for R0=8.5 kpc.
+           posdata_R75.dat		Sample position data outputted by galkin_data.py for R0=7.5 kpc.
+           vcdata_R75.dat		Sample velocity data outputted by galkin_data.py R0=7.5 kpc.
+ galkin/				Package with data handling routines.
+        __init__.py			Package initialisation file.
+        readparsDialog.py		Module with functions to read input parameters from a dialog window.
+        readparsFile.py			Module with functions to read input parameters from an input file.
+        processdata.py			Module with functions to import and process the original kinematic data.
+        functions.py			Module with useful geometrical functions.
+        plots.py			Module with containing plotting functions.
+        data/data_*.dat			Original kinematic data retrieved from the source references in Table 1 of the manuscript.
+
+
+# Dependencies
+The code runs under python 2.7.6 (or higher) and requires the following python packages: matplotlib, numpy, wx (only required if used in 'User-friendly window' mode, see below) and astropy (just required if user wants coordinate conversion done with astropy).
+
+
+# Installation
+After unpacking the tar file, install by typing 'python setup.py install'.
+
+
+# Running the code
+The bulk of the code is provided as a Python package called 'galkin' that can be loaded to any external code. In order to illustrate how the package can be used we provide several scripts under bin/ and described in the following.
+
+  # Scripts
+  ---------------
+
+  # Data retriever
+  The script galkin_data.py retrieves the data given a number of input options and parameters that can be passed in two ways:
+    a) User-friendly window. Type 'python galkin_data.py' and a window with all input options and parameters will be launched.
+    b) Input parameter file. Type 'python galkin_data.py inputpars.txt' to feed the code with the specifications in the file inputpars.txt. An example input parameter file is provided.
+  The code outputs rotation curve and positional data in the files output/vcdata.dat and output/posdata.dat, respectively. For the baseline Galactic parameter setup (default), these files can be compared to the files output/vcdata_baseline.dat and output/posdata_baseline.dat for checking purposes. For completeness, the code also outputs the raw data in the original references in output/rawdata.dat. Notice however that these raw data are given as in the original reference and thus not normalised to the selected input parameters. The user should only use these data if fully aware of all assumptions and nomenclature used in each original reference (see also caveat at the end of this file).
+
+  # Plotter
+  The script data_plotter.py provides a ready-to-use plotter to handle the output data of the script data_retriever.py described above. To use it, just type 'python galkin_plotter.py output/vcdata.dat output/posdata.dat'.
+
+  # Data retriever (fast)
+  We also provide the script galkin_data_fast.py to illustrate how galkin can be used inside another code without writing input or output files to maximise speed. After loading the galkin package, the script simply loads the desired input parameters, uses galkin to process the data and retrieves the desired output measurements, ready to use for any purpose. The user is welcome to use and adapt the script for his/her own purposes. This is useful for applications that need to use galkin repeatedly on the fly, e.g. scanning over input parameters. To run this script, just type 'python galkin_data_fast.py'.
+
+
+# Caveats
+Note that the main point of this tool is to handle in a unified way data from references using different Galactocentric parameters, different definitions and often overlapping in observed sources. The data files under galkin/data/ contain the original published data of each reference. Please do not use these files directly unless you are fully aware of all assumptions of each reference. A similar comment also applies to the output file bin/output/rawdata.dat produced by the script galkin_data.py (see above for details).
